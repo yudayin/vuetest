@@ -29,12 +29,14 @@ export default {
       if (!event._constructed) {
         return
       }
-
       if (!this.food.count) {
         Vue.set(this.food, 'count', 1)
       } else {
         this.food.count++
       }
+      // 添加这句，提交'cart-add'事情给父组件，第二个是要传递的参数
+      this.$emit('cart-add', event.target)
+      console.log('==cart-add==')
     },
     decreaseCart (event) {
       if (!event._constructed) {
@@ -58,7 +60,7 @@ export default {
       transition: all 0.4s linear
       &.move-transtion
         opacity: 1
-        transform: translate3D(0, 0, 0)
+        transform: translate3d(0, 0, 0)
       .inner
         display: inline-block
         line-height: 24px
@@ -66,11 +68,9 @@ export default {
         color: rgb(0, 160, 220)
         transition: all 0.4s linear
         transform: rotate(0)
-      &.move-enter, .move-leave-to
+      &.move-enter, &.move-leave-to
         opacity: 1
-        transform: translate3D(24px, 0, 0)
-        .inner
-          transform: rotate(180deg)
+        transform: translate3d(24px, 0, 0)
     .cart-count
       display: inline-block
       vertical-align: top

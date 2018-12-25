@@ -33,7 +33,7 @@
                                                                      v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" v-on:cart-add="cartAdd"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -41,7 +41,8 @@
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
+              :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
@@ -86,6 +87,17 @@ export default{
         }
       }
       return 0
+    },
+    selectFoods () {
+      let foods = []
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if (food.count) {
+            foods.push(food)
+          }
+        })
+      })
+      return foods
     }
   },
   methods: {
@@ -120,6 +132,20 @@ export default{
         height += item.clientHeight
         this.listHeight.push(height)
       }
+    },
+    cartAdd (el) {
+      this.$nextTick(() => {
+        // 调用shopcart组件的drop()函数
+        this.$refs['shopcart'].drop(el)
+      })
+    },
+    _drop (target) {
+      this.$refs.shopcart.drop(target)
+    }
+  },
+  events: {
+    'cart.add' (target) {
+      this._drop(target)
     }
   },
   components: {shopcart, cartcontrol}
