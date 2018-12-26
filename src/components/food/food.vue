@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="cartcontrol-wrapper">
-          <cartcontrol :food="food" v-on:cart-add="detailAddCart"></cartcontrol>
+          <cartcontrol :food="food" @cart-add="detailAddCart"></cartcontrol>
         </div>
         <transition name="fade">
           <div class="buy" @click.stop.prevent="addFirstFood" v-show="!food.count || food.count===0">加入购物车</div>
