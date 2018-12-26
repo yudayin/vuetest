@@ -20,9 +20,9 @@
     </div>
     <div class="ball-container">
       <!--eslint-disable-next-line-->
-      <div v-for="(ball,index) in balls">
+      <div v-for="(ball,index) in balls" :key="index">
         <transition name="drop" @before-enter="beforeEnter" @enter="enterBall" @after-enter="afterEnter">
-          <div v-show="ball.show" :key="index" class="ball">
+          <div v-show="ball.show" class="ball">
             <div class="inner inner-hook"></div>
           </div>
         </transition>

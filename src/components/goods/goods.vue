@@ -43,7 +43,7 @@
     </div>
     <shopcart ref="shopcart" :select-foods="selectFoods" :delivery-price="seller.deliveryPrice"
               :min-price="seller.minPrice"></shopcart>
-    <food :food="selectedFood" ref="detail" v-on:first-add="cartAdd"></food>
+    <!--<food :food="selectedFood" ref="detail" v-on:first-add="cartAdd"></food>-->
   </div>
 </template>
 
@@ -140,7 +140,7 @@ export default{
       console.log(el)
       this.$nextTick(() => {
         // 调用shopcart组件的drop()函数
-        this.$refs['shopcart'].drop(el)
+        this.$refs.shopcart.drop(el)
       })
     },
     foodDetail (food, event) {
