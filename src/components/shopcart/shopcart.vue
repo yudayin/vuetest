@@ -21,7 +21,7 @@
     <div class="ball-container">
       <!--eslint-disable-next-line-->
       <div v-for="(ball,index) in balls">
-        <transition name="dropdown" @before-enter="beforeEnter" @enter="enter" @after-enter="afterEnter">
+        <transition name="drop" @before-enter="beforeEnter" @enter="enterBall" @after-enter="afterEnter">
           <div v-show="ball.show" :key="index" class="ball">
             <div class="inner inner-hook"></div>
           </div>
@@ -187,7 +187,7 @@ export default {
         }
       }
     },
-    enter (el, done) {
+    enterBall (el, done) {
       /* eslint-disable */
       let rf = el.offsetHeight // 触发重绘html
       this.$nextTick(() => { // 让动画效果异步执行,提高性能
