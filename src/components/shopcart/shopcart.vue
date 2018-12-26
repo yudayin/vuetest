@@ -1,4 +1,5 @@
 <template>
+  <div>
   <div class="shopcart">
     <div class="content" @click="toggleList">
       <div class="content-left">
@@ -11,7 +12,7 @@
         <div class="price" :class="{'highlight':totalPrice >0}">¥{{totalPrice}}</div>
         <div class="desc">另需配送费¥{{deliveryPrice}}元</div>
       </div>
-      <div class="content-right">
+      <div class="content-right" @click.stop.prevent="pay">
         <div class="pay" :class="payClass">
           {{payDesc}}
         </div>
@@ -32,7 +33,7 @@
         <!--<transition name="fold">-->
         <div class="list-header">
           <h1 class="title">购物车</h1>
-          <span class="empty" @click="empty">清空</span>
+          <span class="empty" @click="clearCart">清空</span>
         </div>
         <div class="list-content" ref="listContent">
           <ul>
@@ -51,6 +52,11 @@
         <!--</transition>-->
       </div>
     </transition>
+  </div>
+  <transition name="fade">
+     <!--listShow表示当list详情列表显示的时候mask才显示 -->
+    <div class="list-mask" v-show="listShow" @click="hideList()"></div>
+  </transition>
   </div>
 </template>
 
@@ -207,7 +213,23 @@ export default {
       }
       // 当前是收起状态就展开，展开状态就收起
       this.foldFlag = !this.foldFlag
+    },
+    clearCart (){
+      this.selectFoods.forEach((food)=>{
+        food.count = ''
+      })
+    },
+    hideList () {
+      this.foldFlag = !this.foldFlag; // 点击mark层，购物车详情列表被收回
+    },
+    pay() { //点击去结算
+      if (this.totalPrice < this.minPrice) {
+        return;
+      }
+      window.alert(`支付￥${this.totalPrice}元`);
+      //window.alert('支付' + this.totalPrice + '元');
     }
+
   },
   components: {
     cartcontrol,
@@ -369,5 +391,23 @@ export default {
             position absolute
             right 0
             bottom 6px
+
+  .list-mask
+    position fixed
+    top 0
+    left 0
+    width 100%
+    height 100%
+    z-index 40 //z-index要小于shopcart的index
+    backdrop-filter blur(10px)
+    -webkit-backdrop-filter blur(10px)
+    opacity 1
+    background rgba(7, 17, 27, 0.6)
+    &.fade-enter-active, &.fade-leave-active
+      opacity 1
+      transition: all 0.5s //设置缓动效果
+      background rgba(7, 17, 27, 0.6)
+    &.fade-enter, &.fade-leave-active
+      opacity 0
   //
 </style>
