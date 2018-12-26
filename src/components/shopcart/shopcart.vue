@@ -1,6 +1,6 @@
 <template>
   <div class="shopcart">
-    <div class="content">
+    <div class="content" @click="toggleList">
       <div class="content-left">
         <div class="logo-wrapper">
           <div class="logo" :class="{'highlight':totalCount>0}">
@@ -26,17 +26,37 @@
           </div>
         </transition>
       </div>
-      <!--<transition name="drop">-->
-      <!--eslint-disable-next-line-->
-      <!--<div v-for="(ball,index) in balls" v-show="ball.show" @key="index" class="ball">
-        <div class="inner inner-hook"></div>
-      </div>-->
-      <!--</transition>-->
     </div>
+    <transition name="fold">
+      <div class="shopcart-list" v-show="listShow">
+        <!--<transition name="fold">-->
+        <div class="list-header">
+          <h1 class="title">购物车</h1>
+          <span class="empty" @click="empty">清空</span>
+        </div>
+        <div class="list-content" ref="listContent">
+          <ul>
+            <!--eslint-disable-next-line-->
+            <li class="food" v-for="(food,index) in selectFoods">
+              <span class="name">{{food.name}}</span>
+              <div class="price">
+                <span>¥{{food.price * food.count}}</span>
+              </div>
+              <div class="cartcontrol-wrapper">
+                <cartcontrol :food="food"></cartcontrol>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <!--</transition>-->
+      </div>
+    </transition>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+import cartcontrol from '../cartcontrol/cartcontrol'
+import BScroll from 'better-scroll'
 export default {
   props: {
     selectFoods: {
@@ -73,7 +93,8 @@ export default {
           show: false
         }
       ],
-      dropBalls: []
+      dropBalls: [],
+      foldFlag: true
     }
   },
   computed: {
@@ -107,6 +128,26 @@ export default {
       } else {
         return 'enough'
       }
+    },
+    listShow () {
+      if (!this.totalCount) {
+        /* eslint-disable */
+        this.foldFlag = false
+        return false
+      }
+      let show = this.foldFlag
+      if (show) {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.listContent, {
+              click: true
+            })
+          } else {
+            this.scroll.refresh()
+          }
+        })
+      }
+      return show
     }
   },
   methods: {
@@ -159,12 +200,24 @@ export default {
         ball.show = false
         el.style.display = 'none' // 隐藏小球
       }
+    },
+    toggleList () {
+      if (!this.totalCount) { // 购物车没有商品的时候不可点击
+        return
+      }
+      // 当前是收起状态就展开，展开状态就收起
+      this.foldFlag = !this.foldFlag
     }
+  },
+  components: {
+    cartcontrol,
+    BScroll
   }
 }
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
+  @import "../../common/stylus/mixin"
   .shopcart
     position: fixed
     left: 0
@@ -251,7 +304,6 @@ export default {
             background: #2b333b
           &.enough
             background: #00b43c
-
     .ball-container
       .ball
         position fixed
@@ -265,6 +317,57 @@ export default {
           border-radius 50%
           background rgb(0, 160, 220)
           transition all 0.4s linear
-
+    .shopcart-list
+      position absolute
+      left 0
+      top 0
+      z-index -1
+      width 100%
+      transform translate3d(0, -100%, 0) // 整个列表相对于当前自身的高度做一个偏移
+      &.fold-enter-active, &.fold-leave-active
+        transition: all .5s linear
+        transform translate3d(0, -100%, 0) // 每个表项相对于当前自身的高度做一个偏移
+      &.fold-enter, &.fold-leave-active
+        transform translate3d(0, 0, 0)
+      .list-header
+        height 40px
+        line-height 40px
+        padding 0 18px
+        background #f3f5f7
+        border-bottom 1px solid rgba(7, 17, 27, 0.1)
+        .title
+          float left
+          font-size 14px
+          color rgb(7, 17, 27)
+        .empty
+          float right
+          font-size 12px
+          color rgb(0, 160, 220)
+      .list-content
+        padding 0 18px
+        max-height 201px
+        overflow hidden
+        background #fff
+        .food
+          position relative
+          padding 12px 0
+          box-sizing border-box
+          border-1px(rgba(7, 17, 27, 0.1))
+          .name
+            line-height 24px
+            font-size 14px
+            color rgb(7, 17, 27)
+          .price
+            position absolute
+            right 90px
+            bottom 12px
+            line-height 24px
+            font-size 14px
+            font-weight 700
+            color rgb(240, 20, 20)
+          .cartcontrol-wrapper
+            position absolute
+            right 0
+            bottom 6px
   //
 </style>
