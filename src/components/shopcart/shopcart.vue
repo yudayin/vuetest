@@ -44,7 +44,7 @@
                 <span>¥{{food.price * food.count}}</span>
               </div>
               <div class="cartcontrol-wrapper">
-                <cartcontrol :food="food"></cartcontrol>
+                <cartcontrol :food="food" @cart-add="findCart"></cartcontrol>
               </div>
             </li>
           </ul>
@@ -228,6 +228,9 @@ export default {
       }
       window.alert(`支付￥${this.totalPrice}元`);
       //window.alert('支付' + this.totalPrice + '元');
+    },
+    findCart(target) {
+      this.$emit('shopcart-add', target)
     }
 
   },

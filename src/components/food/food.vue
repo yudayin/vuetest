@@ -19,7 +19,7 @@
           </div>
         </div>
         <div class="cartcontrol-wrapper">
-          <cartcontrol :food="food"></cartcontrol>
+          <cartcontrol :food="food" v-on:cart-add="detailAddCart"></cartcontrol>
         </div>
         <transition name="fade">
           <div class="buy" @click.stop.prevent="addFirstFood" v-show="!food.count || food.count===0">加入购物车</div>
@@ -68,7 +68,7 @@ export default {
       this.$emit('first-add', event.target)
       Vue.set(this.food, 'count', 1)
     },
-    addFood (target) { // 跟add关联的addFood方法
+    detailAddCart (target) { // 跟add关联的addFood方法
       this.$emit('first-add', target) // 触发当前实例food上的事件add(在goods组件上绑定在food组件的add方法)
     }
   },
