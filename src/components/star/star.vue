@@ -1,7 +1,7 @@
 <template>
-  <div class="star" :class="starType" v-if="itemClasses">
+  <div class="star" :class="starType">
     <!--eslint-disable-next-line-->
-    <span v-for="(itemClass,index) in itemClasses" :class="itemClass" class="star-item" @key="index">yu</span>
+    <span v-for="(itemClass,index) in itemClasses" :class="itemClass" class="star-item" @key="index"></span>
   </div>
 </template>
 
@@ -67,7 +67,7 @@ export default{
           bg-image('star48_off')
     &.star-36
       .star-item
-        width; 15px
+        width: 15px
         height: 15px
         margin-right: 6px
         background-size: 15px 15px
@@ -81,7 +81,7 @@ export default{
           bg-image('star36_off')
     &.star-24
       .star-item
-        width; 10px
+        width: 10px
         height: 10px
         margin-right: 3px
         background-size: 10px 10px
