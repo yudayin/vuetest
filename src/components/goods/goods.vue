@@ -100,6 +100,7 @@ export default{
           }
         })
       })
+//      sessionStorage.setItem('selectFoods', foods)
       return foods
     }
   },

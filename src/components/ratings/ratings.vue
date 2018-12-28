@@ -55,6 +55,8 @@
         </ul>
       </div>
     </div>
+    <!--<shopcart ref="shopcart" :select-foods="selectFoodsRating" :delivery-price="seller.deliveryPrice"-->
+              <!--:min-price="seller.minPrice" v-on:shopcart-add="cartAddRating"></shopcart>-->
   </div>
 </template>
 
@@ -63,6 +65,7 @@ import BScroll from 'better-scroll'
 import split from '../split/split'
 import ratingselect from '../ratingselect/ratingselect'
 import star from '../star/star'
+import shopcart from '../shopcart/shopcart'
 import { formatDate } from '../../common/js/date'
 const ERR_OK = 0
 const ALL = 2
@@ -75,6 +78,7 @@ export default{
   },
   data () {
     return {
+      goods: [],
       ratings: [],
       selectType: ALL,
       onlyContent: false,
@@ -104,6 +108,12 @@ export default{
     })
   },
   methods: {
+    cartAddRating (el) {
+      this.$nextTick(() => {
+        // 调用shopcart组件的drop()函数
+        this.$refs.shopcart.drop(el)
+      })
+    },
     selectRating (type) {
       console.log(type)
       this.selectType = type
@@ -134,11 +144,29 @@ export default{
       return formatDate(date, 'yyyy-MM-dd hh:mm')
     }
   },
+  computed: {
+    selectFoodsRating () {
+      let foods = []
+     let selectedFoods = sessionStorage.getItem('selectFoods')
+      if (selectedFoods && selectedFoods.length > 0) {
+//        this.goods = selectedFoods
+        selectedFoods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food)
+            }
+          })
+        })
+        return foods
+      }
+    }
+  },
   components: {
     star,
     ratingselect,
     split,
-    BScroll
+    BScroll,
+    shopcart
   }
 }
 </script>
