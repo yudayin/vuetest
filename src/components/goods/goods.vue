@@ -137,7 +137,6 @@ export default{
       }
     },
     cartAdd (el) {
-      console.log(el)
       this.$nextTick(() => {
         // 调用shopcart组件的drop()函数
         this.$refs.shopcart.drop(el)

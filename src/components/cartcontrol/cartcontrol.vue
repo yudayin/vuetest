@@ -34,14 +34,8 @@ export default {
       } else {
         this.food.count++
       }
-      console.log('add: ')
-//      debugger
       // 添加这句，提交'cart-add'事情给父组件，第二个是要传递的参数
       this.$emit('cart-add', event.target)
-//      this.$nextTick(() => {
-//        this.$emit('cart-add', event.target)
-//      })
-      console.log(event.target)
     },
     decreaseCart (event) {
       if (!event._constructed) {
